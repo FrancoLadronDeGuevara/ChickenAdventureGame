@@ -1,0 +1,67 @@
+[gd_scene load_steps=7 format=3 uid="uid://ccgrmw2qcyjab"]
+
+[ext_resource type="Texture2D" uid="uid://b8gn0h3r3bgh6" path="res://Rocky Roads/Objects/coin_gold.png" id="1_7mpxm"]
+[ext_resource type="Script" path="res://Scripts/Coin2D.gd" id="1_65xm3"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3j4aw"]
+radius = 8.0
+
+[sub_resource type="Animation" id="Animation_5v4sy"]
+resource_name = "Coin"
+length = 0.8
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+
+[sub_resource type="Animation" id="Animation_osi6y"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_847mt"]
+_data = {
+"Coin": SubResource("Animation_5v4sy"),
+"RESET": SubResource("Animation_osi6y")
+}
+
+[node name="Coin" type="Node2D"]
+
+[node name="Coin2D" type="Area2D" parent="."]
+script = ExtResource("1_65xm3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Coin2D"]
+shape = SubResource("CircleShape2D_3j4aw")
+
+[node name="Coin" type="Sprite2D" parent="Coin2D"]
+texture = ExtResource("1_7mpxm")
+hframes = 8
+frame = 1
+
+[node name="AnimationCoin" type="AnimationPlayer" parent="Coin2D"]
+root_node = NodePath("../Coin")
+autoplay = "Coin"
+libraries = {
+"": SubResource("AnimationLibrary_847mt")
+}
+
+[connection signal="body_entered" from="Coin2D" to="Coin2D" method="_on_body_entered"]
